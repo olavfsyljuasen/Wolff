@@ -25,6 +25,11 @@ OSXDIR = $(HOME)
 	@echo `git describe`
 	make -f makefile $*.exec
 
+%.fox  : force
+	cp Makefile.fox Makefile.local
+	@echo `git describe`
+	make -f makefile $*.exec
+
 # The envirmoment variable MYMAKEFILE contains the name of the appropriate Makefile.local
 %    :  force
 	cp $(MYMAKEFILE) Makefile.local 
