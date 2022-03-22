@@ -1,0 +1,27 @@
+DATADIR = $(HOME)
+HOMEDIR = $(HOME)
+INCDIR = -I$(DATADIR)/include -I$(HOMEDIR)/include -I/usr/include -I/usr/local/include 
+LIBDIR = -L$(DATADIR)/lib     -L$(HOMEDIR)/lib     -L/usr/lib -L/usr/local/lib 
+#LIBS   = -lfftw3 -lm -lrand -lstdc++ -lrecipes_cpp -lgsl -lgslcblas 
+#LIBS   = -lfftw3 -lm -lrand -lstdc++ -lrecipes_cpp -lhypergeometric -lgfortran
+LIBS   = -lfftw3 -lm -lstdc++ 
+# C++ compiler
+CCC= g++
+#CCC= pgCC 
+#CCOPTS=  -O3 -DNDEBUG
+#CCOPTS= -O0 -g 
+#CCOPTS= -O2
+CCOPTS= -O -g -Wall
+#CCOPTS= -O3 -DNDEBUG -mcpu=pentium -funroll-loops -felide-constructors -pg
+#CCOPTS= -O3 -mcpu=pentium -funroll-loops -felide-constructors 
+#CCOPTS= -O3 -DNDEBUG -Wno-deprecated
+#CCOPTS= -O3 -Wno-deprecated -pg
+#LINKOPTS = -O3 -static
+LINKOPTS =  -O3 -Wall
+CCFLAGS = $(CCOPTS) $(INCDIR) 
+
+
+
+
+
+

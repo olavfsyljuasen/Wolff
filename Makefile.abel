@@ -1,0 +1,26 @@
+DATADIR = /scratch/sylju
+HOMEDIR = $(HOME)
+SOURCEDIR= $(HOME)/Sources/SpinS/Source
+INCDIR = -I$(HOMEDIR)/include -I$(SOURCEDIR)/include  -I$(MKLROOT)/include -I$(MKLROOT)/include/fftw -I$(LD_LIBRARY_PATH)
+LIBDIR = -L$(HOMEDIR)/lib     -L$(SOURCEDIR)/lib -L$(MKLROOT)/lib/intel64 -L$(LD_LIBRARY_PATH) 
+LIBS   = -lfftw3xc_intel -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -liomp5 -lpthread -lm -lstdc++
+#LIBS   = -lfftw3xc_intel -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -liomp5 -lpthread -lm -lstdc++ -lrecipes_cpp -lhypergeometric -lgfortran
+#LIBS   = -lfftw3xc_intel -lmkl_intel_thread -lmkl_core -liomp5 -lpthread -lm -lstdc++ -lrecipes_cpp -lhypergeometric -lgfortran
+# C++ compiler
+CCC= $(CXX)
+#CCOPTS=  -O -DNDEBUG
+CCOPTS= $(CFLAGS) -mkl -O3 -DNDEBUG 
+#CCOPTS= -O -g
+#CCOPTS= -O3 -DNDEBUG -mcpu=pentium -funroll-loops -felide-constructors -pg
+#CCOPTS= -O3 -mcpu=pentium -funroll-loops -felide-constructors 
+#CCOPTS= -O3 -DNDEBUG -Wno-deprecated
+#CCOPTS= -O3 -Wno-deprecated -pg
+#LINKOPTS = -O3 -static
+LINKOPTS =  -O3
+CCFLAGS = $(CCOPTS) $(INCDIR) 
+
+
+
+
+
+
