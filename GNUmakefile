@@ -35,15 +35,6 @@ OSXDIR = $(HOME)
 
 force : ;
 
-triangular_x64: triangular.x64 triangular_corr.x64 triangular_obc_corr.x64 triangular_fixed_corr.x64 triangular_corr_noadia.x64  triangular_obc_corr_noadia.x64 triangular_corr_reduced.x64
-
-square_x64: square.x64 square_corr.x64
-
-triangular_saga: triangular.saga triangular_corr.saga triangular_obc_corr.saga triangular_fixed_corr.saga triangular_fixed.saga triangular_corr_noadia.saga  triangular_obc_corr_noadia.saga triangular_corr_reduced.saga 
-
-square_saga: square.saga square_corr.saga
-
-
 
 
 

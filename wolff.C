@@ -5,6 +5,7 @@
 #include<fstream>
 #include<string>
 #include<complex>
+#include<iomanip>
 using namespace std;
 
 #ifndef M_PI
@@ -13,7 +14,7 @@ using namespace std;
 
 const double PI=M_PI;
 
-const bool TRACE=false;
+const bool TRACE=true;
 
 const int NSTATICOBS=10;
 const int  MAXRUNS = 20; // the maximum number of runs in the read.in file  
@@ -23,12 +24,13 @@ const string RESFILENAME ="res.dat";
 const string RES1FILENAME="res1.dat";
 const string RES2FILENAME="res2.dat";
 const string RES4FILENAME="res4.dat";
+const string RECORRFILENAME="recorr.dat"; 
+const string IMCORRFILENAME="imcorr.dat"; 
 
 const string READIN   = "read.in";
 
 const int q=POTTSQ;          // q-state Potts model
 const int L=LINEARSIZE;      // linear system size
-
 
 const int NPARAMS=6;
 
@@ -39,11 +41,7 @@ ofstream logfile("log.txt",ios::app);
 
 #include "rnddef.h" // the random number generator RAN                                                                               
 #include "globalheader.h"
-
 #include "RunParameter.h"
-
-
-
 
 
 const int NCLUSTERS=q; //    # of cluster builds in one MC step.
@@ -93,7 +91,7 @@ vector<int> S(N);  // the spin array
 vector<int> M(q);  // number of spins in different states.
 vector<complex<double> > W(q); // order parameter 
 // correlations
-vector<int> C(N);  // 1d correlations
+vector<complex<double> > C(N);  // 1d correlations
 
 
 
@@ -102,6 +100,8 @@ void FlipandBuildFrom(int s,double pconnect)
 {
   int oldstate=S[s];
   int newstate=(S[s]+1)%q;  
+  
+  S[s]=newstate; // flip spinn
 
   M[oldstate]--;  // update spin counts
   M[newstate]++;
@@ -110,7 +110,7 @@ void FlipandBuildFrom(int s,double pconnect)
   for(int dir=0; dir<2*d; dir++) // go thru neighbors
     {
       int j=Nbr(s,dir);
-      if(S[j] != S[s]) 
+      if(S[j] == oldstate) 
 	if( RAN() <pconnect){FlipandBuildFrom(j,pconnect);}
     }
 }
@@ -124,11 +124,13 @@ int main()
 
   const double beta=par[BETA];
   const double pconnect=1.-exp(-beta); // connection probability
+
+  logfile << "Using beta= "<< beta << " pconnect= " << pconnect << endl;
+
   
   const int NEQSTEPS =par[EQSTEPS]; // # of equilibrium MC step.
   const int NMESTEPS =par[MSTEPS]; // # of measurement MC step.
   const int NMBINS   =par[NBINS] ; //   #of measurement bins
-
 
 
   // initialize order parameter weights
@@ -137,22 +139,28 @@ int main()
 
   
   // initialize to all spins
-  for(int s=0; s<N; s++) S[s]=0;   // initialize to the spin=0 state 
-  M[0]=N;
-  
-  srand((unsigned) time(0)); // initialize random number gen.
+  for(int i=0; i<N; i++) S[i]=0;   // initialize to the spin=0 state 
 
+  for(int s=0; s<q; s++) M[s]=0;
+  M[0]=N;
+
+  
   // equilibriate
   for(int t=0; t<NEQSTEPS; t++)
     for(int c=0; c<NCLUSTERS; c++)
       {
 	FlipandBuildFrom(RAN()*N,pconnect);
+
+	if(TRACE)
+	  { cout << "Spin config: " << endl;
+	    for(int i=0; i<N; i++) cout << S[i] << " ";
+	    cout << endl;
+	  }
       }
 
   // measure
   for(int n=0; n<NMBINS; n++)
     {
-      complex<double> tm(0.,0.);
       complex<double> m(0.,0.);
       double m1=0, m2=0, m4=0; // measurement results
 #ifdef CORRELATIONS
@@ -166,10 +174,12 @@ int main()
 	{
 	  for(int c=0; c<NCLUSTERS; c++) FlipandBuildFrom(RAN()*N,pconnect);
 
+	  complex<double> tm(0.,0.);
 	  for(int s=0; s<q; s++)
 	    {
 	      tm+= W[s]*double(M[s]);
-	    }				       
+	    }
+	  tm/=N; 
 	  double tm1= abs(tm);
 	  double tm2=tm1*tm1;
 	  m+=tm; m1+=tm1; m2+=tm2;  m4+=tm2*tm2;
@@ -177,38 +187,48 @@ int main()
 #ifdef CORRELATIONS
 	  for(int r=0; r<N; r++)
 	    {
-	      C[r] += conjugate(W[S[0]])*W[S[r]]; 
+	      C[r] += conj(W[S[0]])*W[S[r]]; 
 	    }
 #endif	  	  
 	}
       m/=NMESTEPS; m1/=NMESTEPS;  m2/=NMESTEPS;  m4/=NMESTEPS;
 
       ofstream resfile(RESFILENAME.c_str(),ios::app);
-      resfile << m << endl;
+      resfile << "1 " << setprecision(10) << real(m) << " " << imag(m) << endl;
       resfile.close();
       
       ofstream resfile1(RES1FILENAME.c_str(),ios::app);
-      resfile1 << m1 << endl;
+      resfile1 << "1 " << setprecision(10) << m1 << endl;
       resfile1.close();
       
       ofstream resfile2(RES2FILENAME.c_str(),ios::app);
-      resfile2 << m2 << endl;
+      resfile2 << "1 " << setprecision(10) << m2 << endl;
       resfile2.close();
       
       ofstream resfile4(RES4FILENAME.c_str(),ios::app);
-      resfile4 << m4 << endl;
+      resfile4 << "1 " << setprecision(10) << m4 << endl;
       resfile4.close();
 
       
 #ifdef CORRELATIONS
-      ofstream corrfile(CORRFILENAME.c_str(),ios::app);
+      ofstream recorrfile(RECORRFILENAME.c_str(),ios::app);
+      ofstream imcorrfile(IMCORRFILENAME.c_str(),ios::app);
+
+      recorrfile << "1 " << setprecision(10);
+      imcorrfile << "1 " << setprecision(10);
+
       for(int r=0; r<N; r++)
 	{
 	  C[r] /= NMESTEPS;
-	  corrfile << C[r] << " ";
+	  recorrfile << real(C[r]) << " "; 
+	  imcorrfile << imag(C[r]) << " ";
 	}
-      corrfile << endl;
-      corrfile.close();
+
+      recorrfile << endl;
+      imcorrfile << endl;
+
+      recorrfile.close();
+      imcorrfile.close();
 #endif	  	  
       
     }
