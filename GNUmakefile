@@ -36,6 +36,10 @@ OSXDIR = $(HOME)
 force : ;
 
 
+potts_x64  :  potts3chain_L16.x64 potts3chaincorr_L16.x64 potts3square_L8.x64 potts3square_L16.x64 potts3square_L32.x64 potts3square_L64.x64
+
+potts_fox  :  potts3chain_L16.fox potts3chaincorr_L16.fox potts3square_L8.fox potts3square_L16.fox potts3square_L32.fox potts3square_L64.fox
+
 
 
 

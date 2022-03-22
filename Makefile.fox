@@ -1,0 +1,29 @@
+#DATADIR = /scratch/sylju
+HOMEDIR = $(HOME)
+SOURCEDIR= $(HOME)/Sources/SpinS/Source
+#Compiling using MKL libraries:
+INCDIR = -I$(EBROOTEIGEN)/include -I$(EBROOTBOOST) -I$(HOMEDIR)/include -I$(SOURCEDIR)/include  -I$(MKLROOT)/include -I$(MKLROOT)/include/fftw -I$(LD_LIBRARY_
+PATH)
+LIBDIR = -L$(HOMEDIR)/lib -L$(SOURCEDIR)/lib -L$(MKLROOT)/lib/intel64 -L$(LD_LIBRARY_PATH) 
+LIBS   = -lfftw3xc_intel -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -liomp5 -lm -lstdc++
+
+#for compiling using FFTW libraries, i.e. no MKL fftw. This must be used when using LONGDOUBLE option
+#INCDIR = -I$(EBROOTEIGEN)/include -I$(EBROOTBOOST) -I$(HOMEDIR)/include -I$(SOURCEDIR)/include  -I$(MKLROOT)/include -I$(EBROOTFFTW)/include/ -I$(LD_LIBRARY_
+PATH)
+#LIBDIR = -L$(HOMEDIR)/lib -L$(SOURCEDIR)/lib -L$(EBROOTFFTW)/lib -L$(MKLROOT)/lib/intel64 -L$(LD_LIBRARY_PATH) 
+#LIBS   = -lfftw3 -lfftw3l -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -liomp5 -lm -lstdc++
+
+BINDIR = $(HOMEDIR)/bin
+EXTENSION = _fox.x
+
+
+# C++ compiler
+#CCC= $(CXX)
+CCC= icpc
+#CCOPTS= $(CFLAGS) -mkl -O3 -DNDEBUG 
+#CCOPTS= $(CFLAGS) -mkl -O3 -std=c++17 -DLONGDOUBLE
+CCOPTS= $(CFLAGS) -mkl -O3 -std=c++17 -DNDEBUG
+LINKOPTS =  -O3 
+CCFLAGS = $(CCOPTS) $(INCDIR) 
+
+

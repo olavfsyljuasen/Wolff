@@ -117,6 +117,10 @@ void FlipandBuildFrom(int s,double pconnect)
 
 int main()
 {
+  Timer mytimer;  
+  logfile << "\nStarting at: " << mytimer << endl;
+  mytimer.Start();
+
   RunParameters rp;
   logfile << "parameters: " << rp;
 
@@ -232,4 +236,19 @@ int main()
 #endif	  	  
       
     }
+  mytimer.Stop();
+  double time_spent = mytimer.GetTimeElapsed();
+  logfile << "Time elapsed:  " << time_spent << " sec. :"
+          << time_spent/3600. << " hours." << endl;
+  logfile << "Ending at: " << mytimer;
+  logfile << "---Done--- " << endl;
+  logfile.close();
+
+  ofstream terminationsign("end.exec");
+  terminationsign << "execution ended at " << mytimer;
+  terminationsign.close();
+
+  cout << "program ended \n";
+  exit(0);
+
 }
