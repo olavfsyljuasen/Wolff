@@ -44,7 +44,7 @@ ofstream logfile("log.txt",ios::app);
 #include "RunParameter.h"
 
 
-const int NCLUSTERS=q; //    # of cluster builds in one MC step.
+const int NCLUSTERS=1; //    # of cluster builds in one MC step.
 
 // lattice handling:
 
