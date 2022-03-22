@@ -2,14 +2,12 @@
 HOMEDIR = $(HOME)
 SOURCEDIR= $(HOME)/Sources/SpinS/Source
 #Compiling using MKL libraries:
-INCDIR = -I$(EBROOTEIGEN)/include -I$(EBROOTBOOST) -I$(HOMEDIR)/include -I$(SOURCEDIR)/include  -I$(MKLROOT)/include -I$(MKLROOT)/include/fftw -I$(LD_LIBRARY_
-PATH)
+INCDIR = -I$(EBROOTEIGEN)/include -I$(EBROOTBOOST) -I$(HOMEDIR)/include -I$(SOURCEDIR)/include  -I$(MKLROOT)/include -I$(MKLROOT)/include/fftw -I$(LD_LIBRARY_PATH)
 LIBDIR = -L$(HOMEDIR)/lib -L$(SOURCEDIR)/lib -L$(MKLROOT)/lib/intel64 -L$(LD_LIBRARY_PATH) 
 LIBS   = -lfftw3xc_intel -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -liomp5 -lm -lstdc++
 
 #for compiling using FFTW libraries, i.e. no MKL fftw. This must be used when using LONGDOUBLE option
-#INCDIR = -I$(EBROOTEIGEN)/include -I$(EBROOTBOOST) -I$(HOMEDIR)/include -I$(SOURCEDIR)/include  -I$(MKLROOT)/include -I$(EBROOTFFTW)/include/ -I$(LD_LIBRARY_
-PATH)
+#INCDIR = -I$(EBROOTEIGEN)/include -I$(EBROOTBOOST) -I$(HOMEDIR)/include -I$(SOURCEDIR)/include  -I$(MKLROOT)/include -I$(EBROOTFFTW)/include/ -I$(LD_LIBRARY_PATH)
 #LIBDIR = -L$(HOMEDIR)/lib -L$(SOURCEDIR)/lib -L$(EBROOTFFTW)/lib -L$(MKLROOT)/lib/intel64 -L$(LD_LIBRARY_PATH) 
 #LIBS   = -lfftw3 -lfftw3l -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -liomp5 -lm -lstdc++
 

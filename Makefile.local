@@ -1,18 +1,18 @@
-DATADIR = /scratch/sylju
+#DATADIR = /scratch/sylju
 HOMEDIR = $(HOME)
-INCDIR = -I$(DATADIR)/include -I$(HOMEDIR)/include -I/usr/include 
-LIBDIR = -L$(DATADIR)/lib     -L$(HOMEDIR)/lib     -L/usr/lib
-LIBS   = -lfftw3 -lm -lrand -lstdc++ 
-BINDIR = $(DATADIR)/bin
-EXTENSION = _x64.x
+SOURCEDIR= $(HOME)/Sources/SpinS/Source
+INCDIR = -I$(HOMEDIR)/include -I$(SOURCEDIR)/include  -I$(MKLROOT)/include -I$(MKLROOT)/include/fftw -I$(LD_LIBRARY_PATH)
+LIBDIR = -L$(HOMEDIR)/lib     -L$(SOURCEDIR)/lib -L$(MKLROOT)/lib/intel64 -L$(LD_LIBRARY_PATH) 
+LIBS   = -lfftw3xc_intel -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -liomp5 -lpthread -lm -lstdc++
+BINDIR = $(HOMEDIR)/bin
+EXTENSION = _saga.x
+
 
 # C++ compiler
-CCC= g++
-
-CCOPTS=  -std=c++11 -O3 -DNDEBUG
-
-LINKOPTS =  -O3 
-
+#CCC= $(CXX)
+CCC= icpc
+CCOPTS= $(CFLAGS) -mkl -O3 -DNDEBUG 
+LINKOPTS =  -O3
 CCFLAGS = $(CCOPTS) $(INCDIR) 
 
 
